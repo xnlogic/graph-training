@@ -1,10 +1,11 @@
 module Northwind
 
 	require 'pacer'
-	require 'pacer-ext/customer'
-	require 'pacer-ext/order'
-	require 'pacer-ext/employee'
 
+
+	def self.load_extensions
+		Dir["pacer-ext/*.rb"].each {|extension| load extension}
+	end
 
 
 	def self.load_graph
@@ -12,6 +13,8 @@ module Northwind
 		Pacer::GraphML.import(g, 'northwind.graphml')
 		g
 	end
+
+	load_extensions()
 
 end
 
