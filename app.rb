@@ -2,6 +2,8 @@ module Northwind
 
 	require 'pacer'
 	require 'pacer-ext/customer'
+	require 'pacer-ext/order'
+	require 'pacer-ext/employee'
 
 
 

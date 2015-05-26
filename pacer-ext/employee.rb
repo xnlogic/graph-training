@@ -1,15 +1,15 @@
 module Northwind
-	module Customer
+	module Employee
 
 		def self.route_conditions(graph)
-        	{type: "Customer"}
+        	{type: "Employee"}
     	end
 		
 
 		module Vertex
 
     	    def display_name
-        	    "#{self[:companyName]} (#{self[:customerID]})"
+        	    "#{self[:firstName]} #{self[:lastName]}, #{self[:title]}"
         	end
 
     	end
@@ -18,9 +18,9 @@ module Northwind
     	module Route
 
     		def orders
-    			self.out_e(:PURCHASED).in_v(Northwind::Order)
+    			self.out_e(:SOLD).in_v(Northwind::Order)
     		end
-    		
+
 		end
 
 
