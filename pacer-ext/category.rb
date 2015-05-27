@@ -17,6 +17,10 @@ module Northwind
 
     	module Route
     		
+            def products
+                self.in_e(:PART_OF).out_v(Northwind::Product)
+            end
+
 		end
 
 

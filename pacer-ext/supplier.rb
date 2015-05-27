@@ -12,6 +12,16 @@ module Northwind
         	    "#{self[:companyName]} (#{self[:supplierID]})"
         	end
 
+            # Properties
+
+            def name
+                self[:companyName]
+            end
+
+            def name=(new_name)
+                self.properties = self.properties.merge({"companyName" => new_name})
+            end
+
     	end
 
 

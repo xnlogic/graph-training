@@ -20,6 +20,18 @@ module Northwind
                 self.customers.first
             end
 
+            def total_price
+                t = 0.0
+                self.out_e(:PRODUCT).properties.each {|p| t += p['unitPrice'] * p['quantity']}
+                return t
+            end
+
+            # Properties
+
+            def shipped_by
+                "#{self[:shipName]}"
+            end
+
     	end
 
 
@@ -31,6 +43,16 @@ module Northwind
 
             def customers
                 self.in_e(:PURCHASED).out_v(Northwind::Customer)
+            end
+
+            def products
+                # Edge properties are 'unitPrice' and 'quantity' (both have double values)
+                self.out_e(:PRODUCT).in_v(Northwind::Product)
+            end
+
+
+            def shipped_by
+                self.properties['shipName']
             end
 
 		end
