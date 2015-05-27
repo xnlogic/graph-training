@@ -25,6 +25,14 @@ module Northwind
                self.out_e(:PART_OF).in_v(Northwind::Category)
             end
 
+            def orders
+               self.in_e(:PRODUCT).out_v(Northwind::Order)
+            end
+
+            def suppliers
+               self.in_e(:SUPPLIES).out_v(Northwind::Supplier)
+            end
+
 		end
 
 
