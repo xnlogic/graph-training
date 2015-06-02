@@ -1,4 +1,4 @@
-module Northwind
+module NorthWind
 	module Supplier
 
 		def self.route_conditions(graph)
@@ -28,7 +28,7 @@ module Northwind
     	module Route
 
             def products
-                self.out_e(:SUPPLIES).in_v(Northwind::Product)
+                self.out_e(:SUPPLIES).in_v(NorthWind::Product)
             end
     		
 		end

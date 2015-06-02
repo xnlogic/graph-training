@@ -1,4 +1,4 @@
-module Northwind
+module NorthWind
 	module Employee
 
 		def self.route_conditions(graph)
@@ -30,7 +30,7 @@ module Northwind
             # Relations
 
             def reports_to
-                self.out_e(:REPORTS_TO).in_v(Northwind::Employee)
+                self.out_e(:REPORTS_TO).in_v(NorthWind::Employee)
             end
 
 
@@ -40,11 +40,11 @@ module Northwind
     	module Route
 
     		def orders
-    			self.out_e(:SOLD).in_v(Northwind::Order)
+    			self.out_e(:SOLD).in_v(NorthWind::Order)
     		end
 
             def report_to
-                self.out_e(:REPORTS_TO).in_v(Northwind::Employee)
+                self.out_e(:REPORTS_TO).in_v(NorthWind::Employee)
             end
 
 		end

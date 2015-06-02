@@ -1,4 +1,4 @@
-module Northwind
+module NorthWind
 	module Customer
 
 		def self.route_conditions(graph)
@@ -18,8 +18,16 @@ module Northwind
     	module Route
 
     		def orders
-    			self.out_e(:PURCHASED).in_v(Northwind::Order)
+    			self.out_e(:PURCHASED).in_v(NorthWind::Order)
     		end
+
+            def products_purchased
+                self.orders.products
+            end
+
+            def name
+                self[:companyName]
+            end
     		
 		end
 

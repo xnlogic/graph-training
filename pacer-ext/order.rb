@@ -1,4 +1,4 @@
-module Northwind
+module NorthWind
 	module Order
 
 		def self.route_conditions(graph)
@@ -38,16 +38,16 @@ module Northwind
     	module Route
 
             def employees
-                self.in_e(:SOLD).out_v(Northwind::Employee)
+                self.in_e(:SOLD).out_v(NorthWind::Employee)
             end
 
             def customers
-                self.in_e(:PURCHASED).out_v(Northwind::Customer)
+                self.in_e(:PURCHASED).out_v(NorthWind::Customer)
             end
 
             def products
                 # Edge properties are 'unitPrice' and 'quantity' (both have double values)
-                self.out_e(:PRODUCT).in_v(Northwind::Product)
+                self.out_e(:PRODUCT).in_v(NorthWind::Product)
             end
 
 
