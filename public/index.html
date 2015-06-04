@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<meta charset="utf-8">
+		<title>Pacer Demo</title>
+		<meta name="generator" content="Bootply" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+		<!--[if lt IE 9]>
+			<script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+		<link href="css/styles.css" rel="stylesheet">
+
+    <script type="text/javascript">
+
+      function getSummaryElement(elementId, color, label, count){
+        count = count || '+'; // '+' is use as a URL query parameter to indicate empty (well ... white space) text
+        return $('<div class="col-xs-6 col-sm-3 placeholder text-center"><img id="' + 
+            elementId + '" src="//placehold.it/160/'+ color +'/fff?text=' + count + 
+            '" class="center-block img-responsive img-circle"><h4>' + label + '</h4></div>');
+      }
+
+      function loadSummaryElements(){
+        var t = [
+          ['/customers/count', 'customers-summary', '428bca', 'Customers'],
+          ['/suppliers/count', 'suppliers-summary', '395756', 'Suppliers'],
+          ['/products/count',  'products-summary',  '474350', 'Products'],
+          ['/orders/count',    'orders-summary',    'd2b6e1', 'Orders']
+        ];
+        var summary_section = $('#summary-section');
+
+        $.each(t, function(i, tt){
+          $.get(tt[0], function(data){
+            summary_section.append(getSummaryElement(tt[1], tt[2], tt[3], data));        
+          });
+        });
+      }
+
+
+      function onLoad(){
+        loadSummaryElements();             
+      }
+    </script>
+	</head>
+
+
+	<body>
+
+
+      <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <div class="container-fluid">
+              <div class="navbar-header">
+                <a class="navbar-brand" href="#">NorthWind</a>
+              </div>
+            </div>
+      </nav>
+
+
+<div class="container-fluid">
+      
+      <div class="row row-offcanvas row-offcanvas-left">
+        
+         <div class="col-sm-3 col-md-2 sidebar-offcanvas" id="sidebar" role="navigation">
+           
+            <ul class="nav nav-sidebar">
+              <li class="active"><a href="#">Welcome</a></li>
+            </ul>
+
+            <ul class="nav nav-sidebar">
+              <li><a href="#">Customers</a></li>
+              <li><a href="#">Suppliers</a></li>
+              <li><a href="#">Products</a></li>
+              <li><a href="#">Orders</a></li>
+            </ul>
+          
+        </div><!--/span-->
+        
+        <div class="col-sm-9 col-md-10 main">
+          
+          <!--toggle sidebar button-->
+          <p class="visible-xs">
+            <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas"><i class="glyphicon glyphicon-chevron-left"></i></button>
+          </p>
+          
+		  <h1 class="page-header">NorthWind Dashboard</h1>
+
+          <div id="summary-section" class="row placeholders">
+            <!-- Summary items will be loaded here dynamically ... -->
+          </div>
+          
+          <hr>
+
+          <h2 class="sub-header">Details</h2>
+
+<!--
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Header</th>
+                  <th>Header</th>
+                  <th>Header</th>
+                  <th>Header</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1,015</td>
+                  <td>sodales</td>
+                  <td>ligula</td>
+                  <td>in</td>
+                  <td>libero</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+-->       
+      </div><!--/row-->
+	</div>
+</div><!--/.container-->
+
+<footer>
+  <p class="pull-right">©2015 NorthWind</p>
+</footer>
+        
+	<!-- script references -->
+  
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+    <script type="text/javascript">
+      $(onLoad);
+    </script>
+    <!--
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/scripts.js"></script>
+    -->
+  
+	</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+
+	<script type="text/javascript">
+
+	$(function(){
+
+		$.get('/customers', function(data){
+
+			var table = $("table");
+			$.each(data, function(i, name){
+				//console.log(name);
+				clazz = (i % 2 == 0 ? "even" : "odd") 
+				table.append('<tr class="' + clazz + '"><td>' + i + '</td><td>' + name + '</td></tr>');
+			});
+		});
+
+	});
+
+	</script>
+
+</head>
+
+<body>
+  
+	<table class="table table-striped">
+	    <tr><th>#</th><th>Customer</th></tr>
+	</table>
+
+</body>
+</html>

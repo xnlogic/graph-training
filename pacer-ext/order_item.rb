@@ -12,11 +12,11 @@ module NorthWind
         	end
 
         	def order
-        		self.out_v(NorthWind::Order).first
+        		self.out_vertex(NorthWind::Order)
         	end
 
         	def product
-        		self.in_v(NorthWind::Product).first
+        		self.in_vertex(NorthWind::Product)
         	end
 
         	def quantity
