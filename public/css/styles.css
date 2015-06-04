@@ -20,6 +20,7 @@ footer {
  * Off Canvas
  * --------------------------------------------------
  */
+ 
 @media screen and (max-width: 768px) {
   .row-offcanvas {
     position: relative;
@@ -78,4 +79,10 @@ footer {
 }
 .main .page-header {
   margin-top: 0;
+}
+
+
+
+.summary-item h4 {
+  text-transform: capitalize; 
 }
