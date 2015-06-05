@@ -29,6 +29,10 @@ footer {
 }
 
 
-.summary-item h4 {
+.capitalized {
   text-transform: capitalize; 
+}
+
+.small-circle{
+  margin-right: 8px;
 }

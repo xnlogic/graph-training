@@ -9,6 +9,9 @@ require 'app.rb'
 @@g = NorthWind.load_graph
 
 
+
+# Helper functions
+
 def count(route)
 	content_type :json
   	route.count.to_json
@@ -19,14 +22,25 @@ def list_objects(route)
   	route.properties.to_a.to_json
 end
 
+def list_object(element)
+	content_type :json
+	if element 
+  		element.properties.to_json
+  	else
+  		status 404
+  		body '"Item not found"'
+  	end
+end
 
+
+# Create basic URLs to count, list and get objects...
 
 [
-	['/customers', NorthWind::Customer], 
-	['/suppliers', NorthWind::Supplier],
-	['/products', NorthWind::Product], 
-	['/orders', NorthWind::Order]
-].each do |path, extension|
+	['/customers', NorthWind::Customer, :customerID], 
+	['/suppliers', NorthWind::Supplier, :supplierID],
+	['/products', NorthWind::Product, :productID], 
+	['/orders', NorthWind::Order, :orderID]
+].each do |path, extension, id_property|
 
 	get path do
   		list_objects @@g.v(extension)
@@ -36,9 +50,28 @@ end
   		count @@g.v(extension)
 	end
 
+	get "#{path}/:item_id" do
+  		list_object @@g.v(extension, { id_property => params[:item_id] }).first
+	end
+
 end
 
 
+# Specific URLs
+get '/customers/:item_id/suggest_products' do
+	customer = @@g.v(NorthWind::Customer, customerID: params[:item_id]).first
+	if(customer)
+		list_objects customer.suggest_products
+	else
+	end
+end
+
+
+
+
+
+
+# Serve the front-end application
 
 get '/' do
 	send_file File.join(settings.public_folder, 'index.html')

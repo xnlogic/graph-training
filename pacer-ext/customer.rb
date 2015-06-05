@@ -12,6 +12,11 @@ module NorthWind
         	    "#{self[:companyName]} (#{self[:customerID]})"
         	end
 
+            def suggest_products
+                self.as(:me).products.customers.is_not(:me)
+                .products.except(self.products).most_frequent(0..2)
+            end
+
     	end
 
 
@@ -21,7 +26,7 @@ module NorthWind
     			self.out_e(:PURCHASED).in_v(NorthWind::Order)
     		end
 
-            def products_purchased
+            def products
                 self.orders.products
             end
 

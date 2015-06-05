@@ -39,6 +39,10 @@ module NorthWind
                self.in_e(:SUPPLIES).out_v(NorthWind::Supplier)
             end
 
+            def customers
+               self.orders.customers
+            end
+
 		end
 
 

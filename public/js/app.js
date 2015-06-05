@@ -7,42 +7,111 @@ app.config(function($stateProvider, $urlRouterProvider) {
     
     $urlRouterProvider.otherwise('/');
     
-    $stateProvider
-        
-        .state('home', {
-            url: '/',
-            templateUrl: 'templates/home.html'
-        })
-        
-        .state('customers', {
-            templateUrl: 'templates/customers.html',
-            controller: function($scope, $http) {
-            	$scope.customers = [];
+    $stateProvider.state('home', {
+        url: '/',
+        templateUrl: 'templates/home.html'
+    });
 
-            	$http.get('customers')
-            		.success(function(data, status, headers, config) {
-            			for (var i = 0; i < data.length; i++) {
-            				$scope.customers.push(data[i]);
-            				// console.log(data[i]);
-            			}
-            		})
-            		.error(function(data, status, headers, config) {
-            			console.log("Cannot get customers ... ", data, status, headers, config);
-            		});
-        	}
-        })
 
-        .state('suppliers', {
-            templateUrl: 'templates/suppliers.html'
-        })
 
-        .state('products', {
-            templateUrl: 'templates/products.html'
-        })
+    // Setup ls states...
+    // That is, states that simply list all items in a table
 
-        .state('orders', {
-            templateUrl: 'templates/orders.html'
+    var ls_setup_data = [
+    	['customers', ['Customer Code', 'Company'], ['customerID', 'companyName'] ], 
+    	['suppliers', ['ID', 'Name']              , ['supplierID', 'companyName'] ],
+    	['products' , ['ID', 'Product', 'Price']  , ['productID', 'productName', 'unitPrice'] ], 
+    	['orders'   , ['ID', 'Shipped By']        , ['orderID', 'shipName'] ]
+    ];
+
+    var create_list_controller = function(label, get_url, table_headers, item_properties, item_id_property){
+    	return function($scope, $http) {
+            $scope.items = [];
+            $scope.label = label;
+            $scope.table_headers = table_headers;
+            $scope.item_properties = item_properties;
+            $scope.item_id_property = item_id_property;
+
+            $http.get(get_url)
+            	.success(function(data, status, headers, config) {
+        			for (var i = 0; i < data.length; i++) {
+        				$scope.items.push(data[i]);
+        			}
+            	})
+        		.error(function(data, status, headers, config) {
+        			console.log("Cannot get " + label + " ... ", data, status, headers, config);
+        		});
+        };
+    };
+
+
+    var create_details_controller = function(state){
+    	return function($scope, $stateParams, $http) {
+    		var type = state.substring(0, state.length - 1);
+    		$scope[type] = {};
+    		var item_id = $stateParams.item_id;
+    		
+            $http.get(state + '/' + item_id)
+            	.success(function(data, status, headers, config) {
+        			$scope[type] = data;
+            	})
+        		.error(function(data, status, headers, config) {
+        			console.log("Cannot get " + type + " " + item_id, data, status, headers, config);
+        		});
+        };
+    };
+
+    for (var i = 0; i < ls_setup_data.length; i++) {
+    	var state = ls_setup_data[i][0];
+    	var table_headers = ls_setup_data[i][1];
+    	var item_properties = ls_setup_data[i][2];
+
+    	// Abstract state, for each of customers/orders/products/suppliers
+    	$stateProvider.state(state, {
+    		url: '/' + state,
+            template: '<div ui-view></div>',
         });
+
+        $stateProvider.state(state + '.list', {
+    		url: '/list',
+            templateUrl: 'templates/ls.html',
+            controller: create_list_controller(state, state, table_headers, 
+                item_properties, state.substring(0, state.length - 1) + 'ID')
+        });
+
+        $stateProvider.state(state + '.details', {
+    		url: '/details/:item_id',
+    		templateUrl: 'templates/' + state.substring(0, state.length - 1) + '.html',
+    		controller: create_details_controller(state)
+    	});
+    }
+    
+
+    $stateProvider.state('customers.suggest_products', {
+		url: '/suggested_products/:customer_id',
+		templateUrl: 'templates/ls.html',
+		controller: function($scope, $stateParams, $http){
+            console.log('state params', $stateParams);
+            $scope.items = [];
+            $scope.label = 'products';
+            $scope.table_headers = ['ID', 'Product', 'Price'];
+            $scope.item_properties = ['productID', 'productName', 'unitPrice'];
+            $scope.item_id_property = 'productID';
+
+            $http.get('/customers/' + $stateParams['customer_id'] + '/suggest_products')
+                .success(function(data, status, headers, config) {
+                    console.log("Got back " + data.length + " suggested products", data);
+
+                    for (var i = 0; i < data.length; i++) {
+                        $scope.items.push(data[i]);
+                    }
+                })
+                .error(function(data, status, headers, config) {
+                    console.log("Cannot get suggested products ... ", data, status, headers, config);
+                });
+        }
+    });
+
 });
 
 

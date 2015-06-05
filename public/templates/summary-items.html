@@ -1,5 +1,5 @@
-<div class="summary-item col-xs-6 col-sm-3 placeholder text-center" ng-repeat="item in items">
-	<a ui-sref="{{item.label}}">
+<div class="capitalized col-xs-6 col-sm-3 placeholder text-center" ng-repeat="item in items">
+	<a ui-sref="{{item.label}}.list">
 		  <img src="//placehold.it/160/{{item.color}}/fff?text={{item.text || '+'}}" 
 		       class="center-block img-responsive img-circle">
 		  <h4>{{item.label}}</h4>
