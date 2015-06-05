@@ -4,6 +4,22 @@ var app = angular.module('NorthWindDemo', ['ui.router']);
 
 app.item_types = ['customers', 'suppliers', 'products', 'orders', 'employees', 'categories'];
 
+
+app.relations = {
+    'customers' : [
+        {relation: 'favorite_sales_staff', page_header: 'Favorite Sales Staff', related_item_type: 'employees'},
+        {relation: 'favorite_products', page_header: 'Frequently Purchased Products', related_item_type: 'products'},
+        {relation: 'orders', page_header: 'Order History', related_item_type: 'orders'},
+        {relation: 'suggest_products', page_header: 'Suggested Products', related_item_type: 'products'}
+        
+    ],
+    'suppliers' : [],
+    'products'  : [],
+    'orders'    : [],
+    'employees' : [],
+    'categories': []
+};
+
 app.run(function ($rootScope) {
 
     $rootScope.item_types = app.item_types;    
@@ -115,6 +131,45 @@ app.create_details_items_controller = function(item_type){
     
 
 
+app.register_relation_state = function(item_type, relation, related_item_type, page_header, stateProvider){
+    var state = item_type + '.' + relation;
+    
+    var views_config = {};
+
+    views_config[''] = {
+        templateUrl: 'templates/details/' + app.singular_form(item_type) + '.html',
+        controller: app.create_details_items_controller(item_type)
+    };
+
+    views_config['table1@' + state] = {
+        templateUrl: 'templates/list.html',
+        controller: app.create_list_items_controller(related_item_type, page_header, 
+            function(stateParams) {
+                return '/' + item_type + '/' + stateParams['item_id'] + '/' + relation;
+            })
+    };
+
+    stateProvider.state(state, {
+        url: '/:item_id/' + relation,
+        views : views_config
+    });
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 app.config(function($stateProvider, $urlRouterProvider) {
@@ -148,93 +203,16 @@ app.config(function($stateProvider, $urlRouterProvider) {
     		templateUrl: 'templates/details/' + app.singular_form(item_type) + '.html',
     		controller: app.create_details_items_controller(item_type)
     	});
+
+
+        // Relations ...
+        var relations = app.relations[item_type];
+        for (var j = 0; j < relations.length; j++) {
+            app.register_relation_state(item_type, relations[j].relation, 
+                relations[j].related_item_type, relations[j].page_header, $stateProvider);    
+        }
+        
     }
-
-
-
-
-    $stateProvider.state('customers.suggest_products', {
-        url: '/:item_id/suggest_products',
-        views : {
-
-            '' : {
-                templateUrl: 'templates/customer.html',
-                controller: app.create_details_items_controller('customers')
-            },
-
-            'table1@customers.suggest_products' : {
-                templateUrl: 'templates/list.html',
-                controller: app.create_list_items_controller('products', 'Suggested Products', 
-                    function(stateParams) {
-                        return '/customers/' + stateParams['item_id'] + '/suggest_products';
-                    })
-            }
-        }
-    });
-
-
-    $stateProvider.state('customers.orders', {
-        url: '/:item_id/orders',
-        views : {
-
-            '' : {
-                templateUrl: 'templates/customer.html',
-                controller: app.create_details_items_controller('customers')
-            },
-
-            'table1@customers.orders' : {
-                templateUrl: 'templates/list.html',
-                controller: app.create_list_items_controller('orders', 'Order History', 
-                    function(stateParams) {
-                        return '/customers/' + stateParams['item_id'] + '/orders';
-                    })
-            }
-        }
-    });
-
-
-    $stateProvider.state('customers.favorite_sales_staff', {
-        url: '/:item_id/favorite_sales_staff',
-        views : {
-
-            '' : {
-                templateUrl: 'templates/customer.html',
-                controller: app.create_details_items_controller('customers')
-            },
-
-            'table1@customers.favorite_sales_staff' : {
-                templateUrl: 'templates/list.html',
-                controller: app.create_list_items_controller('employees', 'Favorite Sales Staff', 
-                    function(stateParams) {
-                        return '/customers/' + stateParams['item_id'] + '/favorite_sales_staff';
-                    })
-            }
-        }
-    });
-
-
-    $stateProvider.state('customers.favorite_products', {
-        url: '/:item_id/favorite_products',
-        views : {
-
-            '' : {
-                templateUrl: 'templates/customer.html',
-                controller: app.create_details_items_controller('customers')
-            },
-
-            'table1@customers.favorite_products' : {
-                templateUrl: 'templates/list.html',
-                controller: app.create_list_items_controller('products', 'Frequently Purchased Products', 
-                    function(stateParams) {
-                        return '/customers/' + stateParams['item_id'] + '/favorite_products';
-                    })
-            }
-        }
-    });
-
-
-    
-    
 
 });
 
