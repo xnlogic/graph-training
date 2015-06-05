@@ -39,7 +39,9 @@ end
 	['/customers', NorthWind::Customer, :customerID], 
 	['/suppliers', NorthWind::Supplier, :supplierID],
 	['/products', NorthWind::Product, :productID], 
-	['/orders', NorthWind::Order, :orderID]
+	['/orders', NorthWind::Order, :orderID],
+	['/employees', NorthWind::Employee, :employeeID],
+	['/categories', NorthWind::Category, :categoryID]
 ].each do |path, extension, id_property|
 
 	get path do
@@ -66,8 +68,29 @@ get '/customers/:item_id/suggest_products' do
 	end
 end
 
+get '/customers/:item_id/orders' do
+	customer = @@g.v(NorthWind::Customer, customerID: params[:item_id]).first
+	if(customer)
+		list_objects customer.orders
+	else
+	end
+end
 
+get '/customers/:item_id/favorite_sales_staff' do
+	customer = @@g.v(NorthWind::Customer, customerID: params[:item_id]).first
+	if(customer)
+		list_objects customer.orders.employees.most_frequent(0..2)
+	else
+	end
+end
 
+get '/customers/:item_id/favorite_products' do
+	customer = @@g.v(NorthWind::Customer, customerID: params[:item_id]).first
+	if(customer)
+		list_objects customer.orders.products.most_frequent(0..5)
+	else
+	end
+end
 
 
 

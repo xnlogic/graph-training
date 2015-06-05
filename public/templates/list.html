@@ -1,0 +1,15 @@
+<h3 class="capitalized">{{header}}</h3>
+
+<table class="table table-striped">
+
+  <tr>
+    <th ng-repeat="h in table_headers[item_type]">{{h}}</th>
+  </tr>
+
+  <tr ng-repeat="item in items">
+    <td ng-repeat="p in item_properties[item_type]">
+      <a ui-sref="{{generate_sref(item, item_type)}}">{{item[p]}}</a>
+    </td>
+  </tr>
+
+</table>

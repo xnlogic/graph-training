@@ -1,7 +1,7 @@
-<div class="capitalized col-xs-6 col-sm-3 placeholder text-center" ng-repeat="item in items">
-	<a ui-sref="{{item.label}}.list">
-		  <img src="//placehold.it/160/{{item.color}}/fff?text={{item.text || '+'}}" 
+<div class="capitalized col-xs-6 col-sm-2 placeholder text-center" ng-repeat="item_type in item_types">
+	<a ui-sref="{{item_type}}.list">
+		  <img src="//placehold.it/160/{{theme[item_type]}}/fff?text={{counts[item_type] || '+'}}" 
 		       class="center-block img-responsive img-circle">
-		  <h4>{{item.label}}</h4>
+		  <h4>{{item_type}}</h4>
 	</a>
 </div>

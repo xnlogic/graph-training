@@ -1,6 +1,6 @@
 /*
  * Style tweaks
- * Color scheme generated using http://coolors.co/app/428bca-395756-e8eef2-474350-d2b6e1
+ * Color scheme generated using http://coolors.co/app/428bca-395756-242038-474350-d2b6e1
  */
 body {
   padding-top: 50px;
@@ -35,4 +35,9 @@ footer {
 
 .small-circle{
   margin-right: 8px;
+}
+
+
+.details-action-items {
+  margin-top: 48px;
 }
