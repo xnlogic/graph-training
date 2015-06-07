@@ -94,6 +94,40 @@ end
 
 
 
+get '/categories/:item_id/products' do
+	category = @@g.v(NorthWind::Category, categoryID: params[:item_id]).first
+	if(category)
+		list_objects category.products
+	else
+	end
+end
+
+get '/categories/:item_id/suppliers' do
+	category = @@g.v(NorthWind::Category, categoryID: params[:item_id]).first
+	if(category)
+		list_objects category.products.suppliers.uniq
+	else
+	end
+end
+
+get '/suppliers/:item_id/products' do
+	supplier = @@g.v(NorthWind::Supplier, supplierID: params[:item_id]).first
+	if(supplier)
+		list_objects supplier.products
+	else
+	end
+end
+
+get '/employees/:item_id/customers' do
+	employee = @@g.v(NorthWind::Employee, employeeID: params[:item_id]).first
+	if(employee)
+		list_objects employee.orders.customers.uniq
+	else
+	end
+end
+
+
+
 # Serve the front-end application
 
 get '/' do

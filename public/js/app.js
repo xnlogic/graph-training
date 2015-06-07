@@ -13,16 +13,25 @@ app.relations = {
         {relation: 'suggest_products', page_header: 'Suggested Products', related_item_type: 'products'}
         
     ],
-    'suppliers' : [],
+    'suppliers' : [
+        {relation: 'products', page_header: 'Supplied Products', related_item_type: 'products'}
+    ],
     'products'  : [],
     'orders'    : [],
-    'employees' : [],
-    'categories': []
+    'employees' : [
+        {relation: 'customers', page_header: 'Customers Served', related_item_type: 'customers'}
+    ],
+
+    'categories': [
+        {relation: 'products', page_header: 'Products', related_item_type: 'products'},
+        {relation: 'suppliers', page_header: 'Suppliers', related_item_type: 'suppliers'}
+    ]
 };
 
 app.run(function ($rootScope) {
 
     $rootScope.item_types = app.item_types;    
+    $rootScope.relations = app.relations;
 
     $rootScope.theme = {
         'customers' : '428bca',
@@ -59,6 +68,15 @@ app.run(function ($rootScope) {
         'employees' : 'employeeID',
         'categories': 'categoryID'
     };  
+
+    $rootScope.get_item_title = {
+        'customers' : function(item){return item.companyName;},
+        'suppliers' : function(item){return item.companyName;},
+        'products'  : function(item){return item.productName;},
+        'orders'    : function(item){return "Order #" + item.orderID;},
+        'employees' : function(item){return item.firstName + ' ' + item.lastName + ', ' + item.title;},
+        'categories': function(item){return item.categoryName;}
+    }; 
 
     $rootScope.generate_sref = function(item, item_type){
         var sref  = item_type + ".details({item_id: '";
@@ -114,14 +132,12 @@ app.create_list_items_controller = function(item_type, header, get_url){
 
 app.create_details_items_controller = function(item_type){
     return function($scope, $stateParams, $http) {
-        var t = app.singular_form(item_type);
-        $scope[t] = {};
-
+        $scope.item_type = item_type;
         var item_id = $stateParams.item_id;
         
         $http.get(item_type + '/' + item_id)
             .success(function(data, status, headers, config) {
-                $scope[t] = data;
+                $scope.item = data;
             })
             .error(function(data, status, headers, config) {
                 console.log("Cannot get " + item_type + " " + item_id, data, status, headers, config);
@@ -137,7 +153,7 @@ app.register_relation_state = function(item_type, relation, related_item_type, p
     var views_config = {};
 
     views_config[''] = {
-        templateUrl: 'templates/details/' + app.singular_form(item_type) + '.html',
+        templateUrl: 'templates/details.html',
         controller: app.create_details_items_controller(item_type)
     };
 
@@ -200,7 +216,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
 
         $stateProvider.state(item_type + '.details', {
     		url: '/details/:item_id',
-    		templateUrl: 'templates/details/' + app.singular_form(item_type) + '.html',
+    		templateUrl: 'templates/details.html',
     		controller: app.create_details_items_controller(item_type)
     	});
 

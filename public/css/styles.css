@@ -41,3 +41,9 @@ footer {
 .details-action-items {
   margin-top: 48px;
 }
+
+.details-action-item{
+  min-height: 20px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+}

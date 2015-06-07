@@ -8,7 +8,7 @@ module NorthWind
 		module Edge
 
 			def display_name
-        	    "#{self.quantity} units of #{self.product.name} at #{self.price}$/unit"
+        	    "#{self.quantity} units of #{self.product.name} at $#{self.price}/unit"
         	end
 
         	def order
