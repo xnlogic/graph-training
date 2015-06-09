@@ -5,15 +5,42 @@ require 'pacer'
 require 'app.rb'
 
 
-# Our graph
+# Load the graph
 @@g = NorthWind.load_graph
 
-# Serve the front-end application
+# Setup homepage
 get '/' do
 	send_file File.join(settings.public_folder, 'index.html')
 end
 
+
+# Define a simple API call
+get '/customers/count' do
+	content_type :json
+	count = @@g.v(NorthWind::Customer).count
+	"#{count}"  # The response
+end
+
+# Define another API call, with a URL argument
+get '/customers/:customer_id' do
+	content_type :json
+	customer = @@g.v(NorthWind::Customer, customerID: params[:customer_id]).first
+
+	if customer
+		customer.properties.to_json
+	else
+		status 404
+  		body '"Item not found"'
+	end
+end
+
+
 # =============================================================================
+# Let's define more API calls ...
+
+
+# Helper objects and functions
+# ----------------------------
 
 @@ext2id_property = {
 	NorthWind::Customer => :customerID,
@@ -32,9 +59,6 @@ end
 	NorthWind::Employee => '/employees',
 	NorthWind::Category => '/categories'	
 }
-
-# =============================================================================
-# Helper functions
 
 def respond_with_json(obj)
 	content_type :json
@@ -71,10 +95,10 @@ def one_to_many(extension, &relation)
 	end
 end
 
-# =============================================================================
-# API
 
-# For each extension ...
+# Basic API calls
+# ---------------
+
 @@ext2id_property.each do |ext, id_property|
 
 	path_prefix = @@ext2path_prefix[ext]
@@ -97,7 +121,9 @@ end
 end
 
 
-# One-to-Many relations ... 
+# One-to-Many relations
+# ---------------------
+
 {
 	NorthWind::Customer => {
 		:suggest_products => Proc.new {|customer| customer.suggest_products},
@@ -125,7 +151,6 @@ end
 
 	NorthWind::Supplier => {
 		:products => Proc.new {|supplier| supplier.products} 
-
 	}
 }
 .each do |ext, relations|

@@ -119,7 +119,7 @@ app.create_list_items_controller = function(item_type, header, get_url){
 
         $http.get(get_url)
             .success(function(data) {
-                console.log("Response from '" + get_url + "': ", data);
+                // console.log("Response from '" + get_url + "': ", data);
                 for (var i = 0; i < data.length; i++) {
                     $scope.items.push(data[i]);
                 }
@@ -139,6 +139,7 @@ app.create_details_items_controller = function(item_type){
         
         $http.get(item_type + '/' + item_id)
             .success(function(data, status, headers, config) {
+                // console.log("Response from '" + item_type + '/' + item_id + "': ", data);
                 $scope.item = data;
             })
             .error(function(data, status, headers, config) {
