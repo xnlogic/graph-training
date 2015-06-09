@@ -16,7 +16,9 @@ app.relations = {
     'suppliers' : [
         {relation: 'products', page_header: 'Supplied Products', related_item_type: 'products'}
     ],
-    'products'  : [],
+    'products'  : [
+        {relation: 'suppliers', page_header: 'Suppliers', related_item_type: 'suppliers'}
+    ],
     'orders'    : [],
     'employees' : [
         {relation: 'customers', page_header: 'Customers Served', related_item_type: 'customers'}
