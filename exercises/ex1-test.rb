@@ -1,7 +1,7 @@
 gem "minitest"
 require 'minitest/autorun'
 require 'pacer'
-require 'part2-exercise.rb'
+require 'ex1.rb'
 
 
 #===============================================================================
