@@ -23,7 +23,6 @@ end
 
 
 
-
 # Return a vertex
 def create_comment(graph, person, post_or_comment, text)
   comment = graph.create_vertex('type' => 'comment', 'text' => text, 'timestamp' => Time.now)

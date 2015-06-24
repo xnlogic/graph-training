@@ -1,5 +1,13 @@
 require 'ex1-solution'
 
+# Helper function.
+# Return the person who posted the given post.
+# The `comment_or_post` argument might be a route. Therefore, the returned
+# value is a route as well.
+def posted_by(comment_or_post)
+  comment_or_post.in_e(:POSTED).out_v(type: 'person')
+end
+
 # Return (a route containing) people who posted at least one post
 def posted_something(people)
   people.lookahead do |person|
@@ -11,7 +19,7 @@ end
 # from at least 3 different people.
 def popular_posts(posts)
   posts.lookahead(min: 3) do |post|
-    get_comments(post).in_e(:POSTED).out_v(type: 'person').uniq
+    posted_by(get_comments(post)).uniq
   end
 end
 
