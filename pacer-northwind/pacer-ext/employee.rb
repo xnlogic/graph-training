@@ -4,7 +4,7 @@ module NorthWind
 		def self.route_conditions(graph)
         	{type: "Employee"}
     	end
-		
+
 
 		module Vertex
 
@@ -17,14 +17,14 @@ module NorthWind
             def name
                 "#{self[:firstName]} #{self[:lastName]}"
             end
-            
+
 
             def title
                 self[:title]
             end
 
             def title=(new_title)
-                self.properties = self.properties.merge({"title" => new_title})
+								self[:title] = new_title
             end
 
             # Relations

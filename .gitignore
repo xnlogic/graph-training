@@ -39,5 +39,5 @@ build/
 /pacer-northwind/tmp/*
 
 # This gets generated automatically, when running a Pacer application
-*/Jarfile.pacer.lock
+*Jarfile.*.lock
 

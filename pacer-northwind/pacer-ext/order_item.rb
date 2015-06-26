@@ -21,11 +21,11 @@ module NorthWind
 
         	def quantity
         		self[:quantity]
-        	end 
+        	end
 
-			def price
+					def price
         		self[:unitPrice]
-        	end        	
+        	end
 
 		end
 
