@@ -21,6 +21,22 @@ Professional workshop, brought to you by the good folks at [XN Logic](http://xnl
 
 See the [`exercises` folder](exercises) of this repo.
 
+The exercises come with basic unit tests that let you check that your code is correct.     
+In order to run these tests, you will need to install [MiniTest](https://rubygems.org/gems/minitest/versions/5.7.0) by running
+
+```
+gem install minitest
+```
+
+After installing MinTest, you can run the tests as follows:
+
+```
+cd exercises
+# Run the tests for exercise 1
+ruby ex1-test.rb
+```
+
+
 ----
 
 Any questions? Talk to us@xnlogic.com
