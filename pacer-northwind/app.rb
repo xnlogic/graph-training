@@ -8,8 +8,7 @@ module NorthWind
 	end
 
 
-	def self.load_graph
-		g = Pacer.tg
+	def self.populate_graph(g)
 		Pacer::GraphML.import(g, 'northwind.graphml')
 		g
 	end

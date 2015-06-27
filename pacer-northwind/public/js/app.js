@@ -14,7 +14,8 @@ app.relations = {
         
     ],
     'suppliers' : [
-        {relation: 'products', page_header: 'Supplied Products', related_item_type: 'products'}
+        {relation: 'products', page_header: 'Supplied Products', related_item_type: 'products'},
+        {relation: 'categories', page_header: 'Supplied Product-Categories', related_item_type: 'categories'}
     ],
     'products'  : [
         {relation: 'suppliers', page_header: 'Suppliers', related_item_type: 'suppliers'}
@@ -106,16 +107,16 @@ app.singular_form = function(item_type){
  * 2. String - Use this string as a URL.
  * 3. Function(stateParams) that returns a URL as a string. 
  */
-app.create_list_items_controller = function(item_type, header, get_url){
+app.create_list_items_controller = function(item_type, header, get_url, listenToState){
     return function($scope, $http, $stateParams){
         $scope.item_type = item_type;
         $scope.header = header;
         $scope.items = [];
 
         get_url = get_url || ('/' + item_type);
-        if(typeof(get_url) == 'function'){
-            get_url = get_url($stateParams);
-        }
+        // if(typeof(get_url) == 'function'){
+        //     get_url = get_url($stateParams);
+        // }
 
         $http.get(get_url)
             .success(function(data) {
@@ -139,7 +140,6 @@ app.create_details_items_controller = function(item_type){
         
         $http.get(item_type + '/' + item_id)
             .success(function(data, status, headers, config) {
-                // console.log("Response from '" + item_type + '/' + item_id + "': ", data);
                 $scope.item = data;
             })
             .error(function(data, status, headers, config) {
@@ -162,10 +162,25 @@ app.register_relation_state = function(item_type, relation, related_item_type, p
 
     views_config['table1@' + state] = {
         templateUrl: 'templates/list.html',
-        controller: app.create_list_items_controller(related_item_type, page_header, 
-            function(stateParams) {
-                return '/' + item_type + '/' + stateParams['item_id'] + '/' + relation;
-            })
+        controller: function($scope, $http, $stateParams){
+            $scope.item_type = related_item_type;
+            $scope.header = page_header;
+            $scope.items = [];
+
+            var get_url = '/' + item_type + '/' + $stateParams['item_id'] + '/' + relation;
+
+            $http.get(get_url)
+                .success(function(data) {
+                    // console.log("Response from '" + get_url + "': ", data);
+                    $scope.items = [];
+                    for (var i = 0; i < data.length; i++) {
+                        $scope.items.push(data[i]);
+                    }
+                })
+                .error(function(data, status, headers, config) {
+                    console.log("Cannot list " + item_type, data, status, headers, config);
+                })
+        }
     };
 
     stateProvider.state(state, {
@@ -173,16 +188,6 @@ app.register_relation_state = function(item_type, relation, related_item_type, p
         views : views_config
     });
 };
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -211,11 +216,15 @@ app.config(function($stateProvider, $urlRouterProvider) {
             template: '<div ui-view></div>',
         });
 
+
+
         $stateProvider.state(item_type + '.list', {
             url: '/list',
             templateUrl: 'templates/list.html',
             controller: app.create_list_items_controller(item_type, item_type)
         });
+
+
 
         $stateProvider.state(item_type + '.details', {
     		url: '/details/:item_id',

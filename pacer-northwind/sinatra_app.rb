@@ -5,9 +5,27 @@ require 'pacer'
 require 'app.rb'
 
 
+# =============================================================================
 # Load the graph
-@@g = NorthWind.load_graph
 
+@@g = nil 
+
+if(ARGV.length == 0)
+	puts "No database file supplied, using in-memory TinkerGraph."
+	puts "If you would like to use Neo4j, you should provide the path to the database file."
+	puts "For example: ruby sinatra_app.rb /home/xnlogic/data/northwind-data"
+	@@g = Pacer.tg
+else
+	puts "Using Neo4j."
+	puts "Graph data will be stored at '#{ARGV[0]}'"
+	require 'pacer-neo4j'
+	@@g = Pacer.neo4j ARGV[0]
+end
+
+NorthWind.populate_graph @@g
+
+
+# =============================================================================
 # Setup homepage
 get '/' do
 	send_file File.join(settings.public_folder, 'index.html')
@@ -150,7 +168,8 @@ end
 	},
 
 	NorthWind::Supplier => {
-		:products => Proc.new {|supplier| supplier.products} 
+		:products => Proc.new {|supplier| supplier.products},
+		:categories => Proc.new {|supplier| supplier.products.categories.uniq } 
 	}
 }
 .each do |ext, relations|
