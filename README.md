@@ -1,12 +1,12 @@
-# Graph Databases
+## Graph Databases - A Practical Introduction
 
-## A Practical Introduction
 
-Professional workshop where we take a deep dive into the world of graph databases.
+[<img src="http://xnlogic.github.io/pacer-northwind/img/screenshot.png">](http://xnlogic.github.io/pacer-northwind/)
 
-Brought to you by the good folks at [XN Logic](http://xnlogic.com). 
 
-[More information ...](http://xnlogic.github.io/pacer-northwind/)
+Professional workshop, brought to you by the good folks at [XN Logic](http://xnlogic.com). 
+
+[Read more ...](http://xnlogic.github.io/pacer-northwind/)
 
 ### Slides
 
