@@ -23,4 +23,4 @@ See the [`exercises` folder](exercises) of this repo.
 
 ----
 
-Any questions? [Contact XN Logic](http://xnlogic.com/contact-us/#contact-details).
+Any questions? Talk to us@xnlogic.com
