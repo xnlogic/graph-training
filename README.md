@@ -1,9 +1,8 @@
-# Graph Databases & The Pacer Library
+# Graph Databases
 
-## Professional Development workshop
+## A Practical Introduction
 
-
-### What is this workshop about?
+#### Brought to you by the good folks at [XN Logic](http://xnlogic.com). 
 
 In this workshop we take a deep dive into the world of graph databases.
 
@@ -17,16 +16,22 @@ After introducing the tools, we move on to the main part of the workshop - A ser
 
 We wrap up the day with a demo of a fully-functional web application that uses [Neo4j](http://neo4j.com/), [Sinatra](http://www.sinatrarb.com/) and Pacer.
 
-
-### Who should attend it?
-
-Software engineers & architects, DBA's, hackers and any techie looking to develop expertise in this exciting emerging technology.
+[Read more ...](http://xnlogic.github.io/pacer-northwind/)
 
 
-### Who is offering the workshop ?
+### Slides
 
-The workshop is offered by [XN Logic](http://xnlogic.com), a team with extensive experience in graph technologies:
+ 1. [Part 1](http://slides.com/xnlogic/graph-training-1#/) - Introduction to graph databases and the Pacer library.
+ 2. [Part 2](http://slides.com/xnlogic/graph-training-2#/) - Graph traversal using Pacer.
+ 3. [Part 3](http://slides.com/xnlogic/graph-training-3#/) - Advanced graph traversal using Pacer.
+ 4. [Part 4](http://slides.com/xnlogic/graph-training-4#/) - Graph data modeling using Pacer.
+ 5. [Part 5](http://slides.com/xnlogic/graph-training-5#/) - Advanced data modeling techniques.
 
- - Developing their data-center management solution, [LightMesh](http://lightmesh.com/), as well its underlying web framework, [XN](http://xnlogic.com/xn-framework).
- - Offering consulting service to enterprise clients, helping them make the most out of their graph-enabled stack.
- - Delivering professional training as a Neo4j Solutions Partner.
+
+### Exercises
+
+See the [`exercises` folder](exercises) of this repo.
+
+----
+
+Any questions? [Contact XN Logic](http://xnlogic.com/contact-us/#contact-details).
