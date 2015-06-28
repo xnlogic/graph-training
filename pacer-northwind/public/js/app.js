@@ -18,11 +18,13 @@ app.relations = {
         {relation: 'categories', page_header: 'Supplied Product-Categories', related_item_type: 'categories'}
     ],
     'products'  : [
-        {relation: 'suppliers', page_header: 'Suppliers', related_item_type: 'suppliers'}
+        {relation: 'suppliers', page_header: 'Suppliers', related_item_type: 'suppliers'},
+        {relation: 'customers', page_header: 'Customers Who Bought This Product', related_item_type: 'customers'}
     ],
     'orders'    : [],
     'employees' : [
-        {relation: 'customers', page_header: 'Customers Served', related_item_type: 'customers'}
+        {relation: 'customers', page_header: 'Customers Served', related_item_type: 'customers'},
+        {relation: 'products', page_header: 'Products Sold', related_item_type: 'products'}
     ],
 
     'categories': [
@@ -114,18 +116,18 @@ app.create_list_items_controller = function(item_type, header, get_url, listenTo
         $scope.items = [];
 
         get_url = get_url || ('/' + item_type);
-        // if(typeof(get_url) == 'function'){
-        //     get_url = get_url($stateParams);
-        // }
 
+        $scope.state_loading=true;
         $http.get(get_url)
             .success(function(data) {
+                $scope.state_loading = false;
                 // console.log("Response from '" + get_url + "': ", data);
                 for (var i = 0; i < data.length; i++) {
                     $scope.items.push(data[i]);
                 }
             })
             .error(function(data, status, headers, config) {
+                $scope.state_loading = false;
                 console.log("Cannot list " + item_type, data, status, headers, config);
             });
     };

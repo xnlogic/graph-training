@@ -55,6 +55,10 @@ module NorthWind
                 self.properties['shipName']
             end
 
+            def order_items
+                self.out_e(:PRODUCT, NorthWind::OrderItem)
+            end
+
 		end
 
 

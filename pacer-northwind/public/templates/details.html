@@ -13,6 +13,13 @@
 		</a>
 	</div>
 
+	<ul ng-if="item_type == 'orders'">
+		<li ng-repeat="order_item in item.order_items">
+			{{order_item.quantity}} unit(s) at ${{order_item.price}}/unit of {{order_item.product_name}}.
+		</li>
+		
+	</ul>
+
 
 </div>
 </div>

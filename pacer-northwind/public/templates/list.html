@@ -1,6 +1,8 @@
 <h3 class="capitalized">{{header}}</h3>
 
-<table class="table table-striped">
+<p ng-show="state_loading">Loading...</p>
+
+<table ng-hide="state_loading" class="table table-striped">
 
   <tr>
     <th ng-repeat="h in table_headers[item_type]">{{h}}</th>

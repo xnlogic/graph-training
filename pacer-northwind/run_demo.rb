@@ -6,40 +6,50 @@ require 'app.rb'
 
 
 # =============================================================================
-# Load the graph
+# Initialization ...
 
 @@g = nil 
 
 if(ARGV.length == 0)
-	puts "No database file supplied, using in-memory TinkerGraph."
+	puts "\n=================================================================================\n\n"
+	puts "INFO: No database file supplied, using in-memory TinkerGraph."
 	puts "If you would like to use Neo4j, you should provide the path to the database file."
 	puts "For example: ruby sinatra_app.rb /home/xnlogic/data/northwind-data"
+	puts "\n=================================================================================\n\n"
 	@@g = Pacer.tg
 else
-	puts "Using Neo4j."
+	puts "\n=================================================================================\n\n"
+	puts "INFO: Using Neo4j."
 	puts "Graph data will be stored at '#{ARGV[0]}'"
+	puts "\n=================================================================================\n\n"
 	require 'pacer-neo4j'
 	@@g = Pacer.neo4j ARGV[0]
 end
 
-NorthWind.populate_graph @@g
+# Load the graph data
+Pacer::GraphML.import(@@g, 'northwind.graphml')
+# Load the Pacer extension modules
+Dir["pacer-ext/*.rb"].each {|extension| load extension}
 
 
 # =============================================================================
-# Setup homepage
+# Map URL's to actions
+
+# Home page
 get '/' do
 	send_file File.join(settings.public_folder, 'index.html')
 end
 
 
-# Define a simple API call
+# A simple API call - Return the number customers in the graph
 get '/customers/count' do
 	content_type :json
 	count = @@g.v(NorthWind::Customer).count
 	"#{count}"  # The response
 end
 
-# Define another API call, with a URL argument
+# Another API call - Get the customer with a specified :customer_id
+# The response will be a JSON object containing all properties of the customer vertex.
 get '/customers/:customer_id' do
 	content_type :json
 	customer = @@g.v(NorthWind::Customer, customerID: params[:customer_id]).first
@@ -97,7 +107,21 @@ def list_objects(route)
 end
 
 def list_object(element)
-	respond_with_json (element.nil? ? nil : element.properties)
+	# If the element is an Order, we want to collect all OrderItems
+	if( element.extensions.include? NorthWind::Order)
+		response = element.properties
+
+		# Collect all order items ...
+		orderItems = []
+		element.order_items.each do |item| 
+			orderItems << {price: item.price, quantity: item.quantity, product_name: item.product.name}
+		end
+		response[:order_items] = orderItems
+
+		respond_with_json response
+	else
+		respond_with_json (element.nil? ? nil : element.properties)
+	end
 end
 
 
@@ -160,11 +184,13 @@ end
 	},
 
 	NorthWind::Product => {
-		:suppliers => Proc.new {|product| product.suppliers}
+		:suppliers => Proc.new {|product| product.suppliers},
+		:customers => Proc.new {|product| product.orders.customers.uniq}
 	},
 
 	NorthWind::Employee => {
-		:customers => Proc.new {|employee| employee.orders.customers.uniq}
+		:customers => Proc.new {|employee| employee.orders.customers.uniq},
+		:products => Proc.new {|employee| employee.orders.products.uniq}
 	},
 
 	NorthWind::Supplier => {
