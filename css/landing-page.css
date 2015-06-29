@@ -178,3 +178,9 @@ footer {
 p.copyright {
     margin: 15px 0 0;
 }
+
+
+.banner {
+    text-decoration: none;
+    color: #f8f8f8;
+}
