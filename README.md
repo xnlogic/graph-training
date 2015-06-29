@@ -1,7 +1,7 @@
 ## Graph Databases - A Practical Introduction
 
 
-[<img src="http://xnlogic.github.io/pacer-northwind/img/screenshot.png">](http://xnlogic.github.io/graph-training/)
+[<img src="http://xnlogic.github.io/graph-training/img/screenshot.png">](http://xnlogic.github.io/graph-training/)
 
 
 Professional workshop, brought to you by the good folks at [XN Logic](http://xnlogic.com). 
