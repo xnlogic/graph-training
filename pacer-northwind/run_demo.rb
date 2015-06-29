@@ -14,7 +14,7 @@ if(ARGV.length == 0)
 	puts "\n=================================================================================\n\n"
 	puts "INFO: No database file supplied, using in-memory TinkerGraph."
 	puts "If you would like to use Neo4j, you should provide the path to the database file."
-	puts "For example: ruby sinatra_app.rb /home/xnlogic/data/northwind-data"
+	puts "For example: ruby run_demo.rb /home/xnlogic/data/northwind-data"
 	puts "\n=================================================================================\n\n"
 	@@g = Pacer.tg
 else
