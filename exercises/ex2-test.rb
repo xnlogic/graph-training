@@ -1,8 +1,8 @@
 gem "minitest"
 require 'minitest/autorun'
 require 'pacer'
-require 'ex1-solution.rb'
-require 'ex2-solution.rb'
+require_relative 'ex1-solution.rb'
+require_relative 'ex2.rb'
 
 
 #===============================================================================
