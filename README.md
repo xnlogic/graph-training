@@ -10,12 +10,12 @@ Professional workshop, brought to you by the good folks at [XN Logic](http://xnl
 
 ### Slides
 
- 1. [Part 1](http://slides.com/xnlogic/graph-training-1#/) - Introduction to graph databases and the Pacer library
- 2. [Part 2](http://slides.com/xnlogic/graph-training-2#/) - Graph traversal using Pacer
- 3. [Part 3](http://slides.com/xnlogic/graph-training-3#/) - Advanced graph traversal using Pacer
- 4. [Part 4](http://slides.com/xnlogic/graph-training-4#/) - Graph data modeling using Pacer
- 5. [Part 5](http://slides.com/xnlogic/graph-training-5#/) - Advanced data modeling techniques
- 6. [Part 6](http://slides.com/xnlogic/graph-training-6#/) - Graph Traversal API using Sinatra, Pacer and Neo4j 
+ 1. [Part 1](http://slides.com/xnlogic/graph-training-1/live) - Introduction to graph databases and the Pacer library
+ 2. [Part 2](http://slides.com/xnlogic/graph-training-2/live) - Graph traversal using Pacer
+ 3. [Part 3](http://slides.com/xnlogic/graph-training-3/live) - Advanced graph traversal using Pacer
+ 4. [Part 4](http://slides.com/xnlogic/graph-training-4/live) - Graph data modeling using Pacer
+ 5. [Part 5](http://slides.com/xnlogic/graph-training-5/live) - Advanced data modeling techniques
+ 6. [Part 6](http://slides.com/xnlogic/graph-training-6/live) - Graph Traversal API using Sinatra, Pacer and Neo4j 
 
 ### Exercises
 
