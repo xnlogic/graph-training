@@ -1,5 +1,5 @@
-require 'ex1-solution'
-require 'ex3-solution'
+require_relative 'ex1-solution.rb'
+require_relative 'ex3-solution.rb'
 
 # Return (a route containing) all people who commented on any of the given
 # person's posts.

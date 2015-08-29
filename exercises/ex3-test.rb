@@ -1,5 +1,5 @@
 require_relative 'ex1-solution.rb'
-require_relative 'ex3-solution.rb'
+require_relative 'ex3.rb'
 require_relative 'util.rb'
 
 
