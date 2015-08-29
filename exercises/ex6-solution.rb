@@ -1,4 +1,4 @@
-require 'ex1-solution'
+require_relative 'ex1-solution'
 
 # Get the number of posts posted by each person from the given people.
 # - The `people` argument is a route.
