@@ -1,5 +1,6 @@
 
-
+# Return a route of all posts that were either posted by or liked by
+# the given person
 def get_posts_liked_or_posted_by(person)
   person
     .branch do |p|
