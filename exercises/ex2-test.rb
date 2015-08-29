@@ -1,0 +1,243 @@
+gem "minitest"
+require 'minitest/autorun'
+require 'pacer'
+require 'ex1-solution.rb'
+require 'ex2-solution.rb'
+
+
+#===============================================================================
+
+@@test_data = {
+  :Alice => [
+    {
+      text: 'Foo',
+      comments: [
+        {by: :Bob, text: 'Bar'}
+      ]
+    },
+
+    {
+      text: "Learning about graph db's",
+      comments: [
+        {by: :Charlie, text: 'Sounds interesting'}
+      ]
+    }
+  ], # END Alice's posts
+
+
+  :Bob => [
+    {text: "Bob's only post!", comments: [
+      {by: :Dave, text: "And Dave's only comment"}
+      ] }
+  ] , # END Bob's posts
+
+
+  :Charlie => [
+
+  ] , # END Charlie's posts
+
+  :Dave => [
+    {
+      text: "Dave's interesting post",
+      comments: [
+        {
+          by: :Bob, text: 'Comment 1',
+          comments: [
+            {by: :Dave, text: 'Comment 1.1'},
+            {by: :Alice, text: 'Comment 1.2'}
+          ]
+        },
+        {
+          by: :Alice, text: 'Comment 2',
+          comments: [
+            {
+              by: :Dave, text: 'Comment 2.1',
+              comments: [
+                {by: :Charlie, text: 'Comment 2.1.1'},
+                {by: :Alice, text: 'Comment 2.1.2'}
+              ]
+            }
+          ]
+        }
+      ]
+    },
+  ]# END Dave's posts
+}
+
+
+#===============================================================================
+
+
+
+class TestCases < Minitest::Test
+
+
+  # The setup method runs before *every* test case and does the following:
+  # 1. Creates a new graph
+  # 2. Populates it with vertices and edges, based on the data defined
+  #    at the top of this file.
+  # 3. Stores the created vertices in instance variables.
+  #    (we use these instance variables in our test_XXX methods below)
+  def setup
+    @g = Pacer.tg
+
+    @people = Hash.new(nil)  # Name (string) to Person (vertex)
+    @posts = Hash.new {|hsh, key| hsh[key] = [] }   # Person's name (string) to the person's posts (array of vertices)
+    @comments = Hash.new {|hsh, key| hsh[key] = [] } # Post/Comment (vertex) to comments about that post/comment (array of vertices)
+
+
+    @@test_data.each do |name, _|
+      @people[name] = create_person @g, name
+    end
+
+    @@test_data.each do |name, posts_data|
+      posts_data.each  do |post_data|
+            # Create the post
+            post = create_post(@g, @people[name], post_data[:text])
+            # Store it in an instance variable
+            @posts[name] << post
+            # Process its comments
+            if(post_data[:comments])
+              post_data[:comments].each {|c| _create_comment_about(post, c)}
+            end
+
+        end
+    end
+
+  end
+
+
+  #=============================================================================
+  # Helper Methods
+  #=============================================================================
+
+
+  # Create a comments recursively.
+  # - comment_or_post is the vertex we're commenting about
+  # - data is a hash with keys `text` and `comments`.
+  #        `text` is the text of the comment we're creating.
+  #        `comments` contains the data for comments on the comment we just created.
+  def _create_comment_about(comment_or_post, data)
+    person = @people[data[:by]]
+    new_comment = create_comment @g, person,  comment_or_post, data[:text]
+    @comments[comment_or_post] << new_comment
+
+    # Create comments recursively ...
+    if(data[:comments])
+      data[:comments].each {|c| _create_comment_about(new_comment, c)}
+    end
+  end
+
+
+  def _assert_is_vertex_or_vertex_route(created_obj, create_method_name)
+    refute_nil created_obj, "#{create_method_name} returned nil"
+    assert created_obj.vertices_route?, "#{create_method_name} returned #{created_obj}. Expected a vertex or vertex-route."
+  end
+
+
+  # Assert that the given route and array contain the same items.
+  # Ignore the order of the items.
+  # If there are repeated items, assert that they occur the same number of
+  # times in both the array and route.
+  def _assert_same_items(route, array)
+    hash1 = Hash.new(0)
+    route.each{|key| hash1[key] += 1}
+
+    hash2 = Hash.new(0)
+    array.each{|key| hash2[key] += 1}
+
+    assert_equal hash1, hash2
+  end
+
+
+  def _get_all_comments(post)
+    all_comments = []
+
+    # Perform Breadth-First Search for comments, starting from Dave's first post
+    q = [post]
+    while not q.empty?
+      post_or_comment = q.shift
+      if (post_or_comment.nil?)
+        next
+      end
+      all_comments += @comments[post_or_comment]
+      q += @comments[post_or_comment]
+    end
+
+    all_comments
+  end
+
+
+
+  #=============================================================================
+  # Test cases
+  # ----------
+  #
+  # NOTE: Methods that start with 'test_' get run automatically by MiniTest
+  #=============================================================================
+
+
+  def test_get_person_by_name
+    name = :Alice
+    alice = get_person_by_name(@g, name)
+    refute_nil alice, "Could not find a person whose name is #{name}"
+    assert alice.vertices_route?, "The returned person is not a vertex, it is #{alice}"
+    assert alice[:name] == name, "Expected '#{name}', got #{alice[:name]}"
+  end
+
+  def test_get_person_by_non_existing_name
+    name = :NoSuchName
+    assert_nil get_person_by_name(@g, name)
+  end
+
+
+  def test_get_posts_and_comments_by
+    r = get_posts_and_comments_by(get_person_by_name(@g, :Bob))
+    _assert_same_items r[:text], ["Bob's only post!", 'Bar', 'Comment 1']
+  end
+
+  def test_get_posts_and_comments_by
+    r = get_posts_and_comments_by(get_person_by_name(@g, :Bob))
+    _assert_same_items r[:text], ["Bob's only post!", 'Bar', 'Comment 1']
+  end
+
+
+  def test_get_recent_posts_and_comments
+    @g.v(type: Set['post','comment']).each do |post_or_comment|
+      post_or_comment[:timestamp] = Time.now - 60 * 60 * 24 - 7
+    end
+
+    assert_equal 0, get_recent_posts_and_comments(@g).count
+  end
+
+
+  def test_get_recent_posts_and_comments
+    @g.v(type: Set['post','comment']).each do |post_or_comment|
+      post_or_comment[:timestamp] = Time.now - 60 * 60 * 24 - 7
+    end
+
+    v = @g.v(type: Set['post','comment']).first
+    v[:timestamp] = Time.now
+
+    assert_equal 1, get_recent_posts_and_comments(@g).count
+    assert_equal v, get_recent_posts_and_comments(@g).first
+  end
+
+
+  def test_active_people
+    _assert_same_items active_people(@g), [@people[:Alice], @people[:Dave]]
+  end
+
+
+  def test_most_active_person
+    assert_equal @people[:Alice], most_active_person(@g)
+  end
+
+  def test_most_active_person_2
+    get_posts_and_comments_by(get_person_by_name(@g, :Alice)).each do |v|
+      v[:timestamp] = Time.now - 60 * 60 * 24 * 1 - 7
+    end
+    assert_equal @people[:Dave], most_active_person(@g)
+  end
+
+end

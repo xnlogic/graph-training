@@ -1,6 +1,6 @@
 
 def get_person_by_name(graph, name)
-  graph.v(type: 'person', name: 'Alice')
+  graph.v(type: 'person', name: name).first
 end
 
 
@@ -15,7 +15,7 @@ def get_recent_posts_and_comments(graph)
 end
 
 
-# Get people who posted at 3 posts and/or comments
+# Get people who posted more than 3 posts and/or comments
 # during the last week.
 def active_people(graph)
   graph.v(type: 'person').filter do |person|
